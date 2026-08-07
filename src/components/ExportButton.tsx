@@ -80,7 +80,7 @@ export default function ExportButton({ result }: { result: AuditResult }) {
         onClick={() => setOpen((o) => !o)}
         aria-haspopup="menu"
         aria-expanded={open}
-        className="cursor-pointer inline-flex items-center gap-2 rounded-lg border border-primary bg-white px-4 py-2 text-sm font-semibold text-primary transition-all duration-200 hover:bg-primary/5 active:scale-[0.97] focus:outline-none focus-visible:ring-2 focus-visible:ring-ring"
+        className="cursor-pointer inline-flex items-center gap-2 rounded-lg border border-primary bg-surface px-4 py-2 text-sm font-semibold text-primary transition-all duration-200 hover:bg-primary/5 active:scale-[0.97] focus:outline-none focus-visible:ring-2 focus-visible:ring-ring"
       >
         <Download className="w-4 h-4" aria-hidden="true" />
         Download Audit Report
@@ -89,7 +89,7 @@ export default function ExportButton({ result }: { result: AuditResult }) {
       {open && (
         <div
           role="menu"
-          className="absolute right-0 mt-2 w-56 rounded-lg border border-border bg-white shadow-lg py-1 z-30"
+          className="absolute right-0 mt-2 w-56 rounded-lg border glass-surface shadow-lg py-1 z-30"
         >
           <button
             type="button"

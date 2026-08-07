@@ -13,7 +13,7 @@ export default function AuditLogTable({ result }: { result: AuditResult }) {
   const { citations } = result;
 
   return (
-    <section className="rounded-xl border border-border bg-white shadow-sm p-5 sm:p-6">
+    <section className="rounded-xl border border-border bg-surface shadow-sm p-5 sm:p-6">
       <div className="flex items-center justify-between mb-4">
         <h3 className="font-heading text-sm font-semibold text-foreground flex items-center gap-2">
           <FileSearch className="w-4 h-4 text-primary" aria-hidden="true" />

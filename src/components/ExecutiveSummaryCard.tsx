@@ -23,7 +23,7 @@ const STATUS_COPY: Record<AuditResult["riskStatus"], string> = {
 
 export default function ExecutiveSummaryCard({ result }: { result: AuditResult }) {
   return (
-    <section className="rounded-xl border border-border bg-white shadow-sm p-5 sm:p-6">
+    <section className="rounded-xl border border-border bg-surface shadow-sm p-5 sm:p-6">
       <div className="flex flex-col sm:flex-row items-center sm:items-start gap-6">
         <RiskGauge score={result.riskScore} status={result.riskStatus} />
         <div className="flex-1 text-center sm:text-left">

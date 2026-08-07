@@ -1,5 +1,6 @@
 import { useEffect, useId, useRef, useState } from "react";
-import { ChevronDown, Check, ShieldCheck } from "lucide-react";
+import { ChevronDown, Check, ShieldCheck, Bell, User } from "lucide-react";
+import ThemeToggle from "./ThemeToggle";
 
 const WORKSPACES = ["Acme Security Team", "Procurement Ops", "IT Vendor Risk", "Personal Sandbox"];
 
@@ -51,7 +52,7 @@ export default function Header() {
   }
 
   return (
-    <header className="border-b border-border bg-white/80 backdrop-blur-sm sticky top-0 z-20">
+    <header className="border-b glass-surface sticky top-0 z-20">
       <div className="mx-auto max-w-7xl px-4 sm:px-6 py-4 flex flex-wrap items-center justify-between gap-3">
         <div className="flex items-center gap-3">
           <div className="flex items-center justify-center w-9 h-9 rounded-lg bg-primary text-on-primary shrink-0">
@@ -68,54 +69,78 @@ export default function Header() {
           </div>
         </div>
 
-        <div ref={containerRef} className="relative">
+        <div className="flex items-center gap-2 sm:gap-3">
+          <div ref={containerRef} className="relative">
+            <button
+              type="button"
+              role="combobox"
+              aria-expanded={open}
+              aria-controls={listboxId}
+              aria-haspopup="listbox"
+              aria-label="Switch workspace"
+              onClick={() => setOpen((o) => !o)}
+              onKeyDown={onKeyDown}
+              className="cursor-pointer flex items-center gap-2 rounded-lg border border-border bg-surface px-3 py-2 text-sm font-medium text-foreground hover:border-primary/40 transition-colors duration-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-ring"
+            >
+              <span className="text-foreground/50 hidden sm:inline">Workspace:</span>
+              <span className="truncate max-w-[10rem]">{selected}</span>
+              <ChevronDown
+                className={`w-4 h-4 text-foreground/50 transition-transform duration-200 ${open ? "rotate-180" : ""}`}
+                aria-hidden="true"
+              />
+            </button>
+
+            {open && (
+              <ul
+                id={listboxId}
+                role="listbox"
+                aria-activedescendant={`${listboxId}-${activeIndex}`}
+                className="absolute right-0 mt-2 w-56 rounded-lg border glass-surface shadow-lg py-1 z-30"
+              >
+                {WORKSPACES.map((ws, i) => (
+                  <li
+                    key={ws}
+                    id={`${listboxId}-${i}`}
+                    role="option"
+                    aria-selected={ws === selected}
+                    onMouseEnter={() => setActiveIndex(i)}
+                    onClick={() => {
+                      setSelected(ws);
+                      setOpen(false);
+                    }}
+                    className={`cursor-pointer flex items-center justify-between gap-2 px-3 py-2 text-sm transition-colors duration-150 ${
+                      i === activeIndex ? "bg-muted" : ""
+                    } ${ws === selected ? "text-primary font-medium" : "text-foreground"}`}
+                  >
+                    <span className="truncate">{ws}</span>
+                    {ws === selected && <Check className="w-4 h-4 shrink-0" aria-hidden="true" />}
+                  </li>
+                ))}
+              </ul>
+            )}
+          </div>
+
           <button
             type="button"
-            role="combobox"
-            aria-expanded={open}
-            aria-controls={listboxId}
-            aria-haspopup="listbox"
-            aria-label="Switch workspace"
-            onClick={() => setOpen((o) => !o)}
-            onKeyDown={onKeyDown}
-            className="cursor-pointer flex items-center gap-2 rounded-lg border border-border bg-white px-3 py-2 text-sm font-medium text-foreground hover:border-primary/40 transition-colors duration-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-ring"
+            aria-label="Notifications"
+            className="cursor-pointer relative flex items-center justify-center w-9 h-9 rounded-lg border border-border bg-surface text-foreground/70 hover:text-foreground hover:border-primary/40 transition-all duration-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-ring shrink-0"
           >
-            <span className="text-foreground/50 hidden sm:inline">Workspace:</span>
-            <span className="truncate max-w-[10rem]">{selected}</span>
-            <ChevronDown
-              className={`w-4 h-4 text-foreground/50 transition-transform duration-200 ${open ? "rotate-180" : ""}`}
+            <Bell className="w-4 h-4" aria-hidden="true" />
+            <span
+              className="absolute top-1.5 right-1.5 w-2 h-2 rounded-full bg-accent ring-2 ring-surface"
               aria-hidden="true"
             />
           </button>
 
-          {open && (
-            <ul
-              id={listboxId}
-              role="listbox"
-              aria-activedescendant={`${listboxId}-${activeIndex}`}
-              className="absolute right-0 mt-2 w-56 rounded-lg border border-border bg-white shadow-lg py-1 z-30"
-            >
-              {WORKSPACES.map((ws, i) => (
-                <li
-                  key={ws}
-                  id={`${listboxId}-${i}`}
-                  role="option"
-                  aria-selected={ws === selected}
-                  onMouseEnter={() => setActiveIndex(i)}
-                  onClick={() => {
-                    setSelected(ws);
-                    setOpen(false);
-                  }}
-                  className={`cursor-pointer flex items-center justify-between gap-2 px-3 py-2 text-sm transition-colors duration-150 ${
-                    i === activeIndex ? "bg-muted" : ""
-                  } ${ws === selected ? "text-primary font-medium" : "text-foreground"}`}
-                >
-                  <span className="truncate">{ws}</span>
-                  {ws === selected && <Check className="w-4 h-4 shrink-0" aria-hidden="true" />}
-                </li>
-              ))}
-            </ul>
-          )}
+          <ThemeToggle />
+
+          <button
+            type="button"
+            aria-label="User account"
+            className="cursor-pointer flex items-center justify-center w-9 h-9 rounded-full bg-secondary/15 text-secondary hover:bg-secondary/25 transition-all duration-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-ring shrink-0"
+          >
+            <User className="w-4 h-4" aria-hidden="true" />
+          </button>
         </div>
       </div>
     </header>

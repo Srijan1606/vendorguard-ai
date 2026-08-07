@@ -17,6 +17,40 @@
 
   --color-success: oklch(0.6274 0.17 145);
   --color-warning: oklch(0.7686 0.1647 70.08);
+
+  /* Opaque card/panel surface — distinct from --color-background so cards
+     lift off the page in both themes. Replaces hardcoded bg-white. */
+  --color-surface: oklch(1 0 0);
+
+  /* Card border-radius token: 20px, applied globally via the rounded-xl
+     utility used on every card-like surface in this project. */
+  --radius-xl: 1.25rem;
+
+  /* Shadow tokens — reused by Tailwind's shadow-sm/md/lg/xl utilities. */
+  --shadow-sm: 0 1px 2px oklch(0 0 0 / 0.05);
+  --shadow-md: 0 4px 6px oklch(0 0 0 / 0.1);
+  --shadow-lg: 0 10px 15px oklch(0 0 0 / 0.1);
+  --shadow-xl: 0 20px 25px oklch(0 0 0 / 0.15);
+}
+
+/* Dark theme — activated by adding class="dark" to <html> (see ThemeToggle).
+   Only neutrals + primary are overridden; brand/status colors (secondary,
+   accent, destructive, success, warning) already read clearly on dark
+   surfaces and stay consistent across themes. */
+.dark {
+  --color-background: oklch(0.19 0.028 265);
+  --color-foreground: oklch(0.93 0.014 250);
+  --color-surface: oklch(0.24 0.032 265);
+  --color-muted: oklch(0.29 0.036 265);
+  --color-border: oklch(0.34 0.04 265);
+  --color-primary: oklch(0.7 0.15 265);
+  --color-on-primary: oklch(0.16 0.03 265);
+  --color-ring: oklch(0.7 0.15 265);
+
+  --shadow-sm: 0 1px 2px oklch(0 0 0 / 0.35);
+  --shadow-md: 0 4px 6px oklch(0 0 0 / 0.4);
+  --shadow-lg: 0 10px 15px oklch(0 0 0 / 0.45);
+  --shadow-xl: 0 20px 25px oklch(0 0 0 / 0.5);
 }
 
 @media (prefers-reduced-motion: reduce) {
@@ -31,4 +65,14 @@
 body {
   background-color: var(--color-background);
   color: var(--color-foreground);
+  transition: background-color 200ms ease, color 200ms ease;
+}
+
+/* Glassmorphism accent for elevated chrome — sticky header, dropdown
+   menus/panels, modals. Translucent surface + blur + soft border. */
+.glass-surface {
+  background-color: color-mix(in oklch, var(--color-surface) 78%, transparent);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border-color: color-mix(in oklch, var(--color-border) 80%, transparent);
 }

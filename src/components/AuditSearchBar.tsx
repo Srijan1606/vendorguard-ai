@@ -68,7 +68,7 @@ export default function AuditSearchBar({
   }
 
   return (
-    <section className="rounded-xl border border-border bg-white shadow-sm p-4 sm:p-6">
+    <section className="rounded-xl border border-border bg-surface shadow-sm p-4 sm:p-6">
       <form onSubmit={handleSubmit} noValidate>
         <label htmlFor="vendor-input" className="block text-sm font-medium text-foreground mb-2">
           Vendor Compliance Audit
@@ -90,7 +90,7 @@ export default function AuditSearchBar({
               placeholder="Enter SaaS Vendor Name or Domain (e.g., Slack, Notion, Zoom)"
               aria-invalid={!!error}
               aria-describedby={error ? "vendor-input-error" : undefined}
-              className="w-full rounded-lg border border-border bg-white pl-10 pr-4 py-3 text-sm text-foreground placeholder:text-foreground/40 focus:outline-none focus-visible:ring-2 focus-visible:ring-ring focus:border-primary transition-colors duration-200"
+              className="w-full rounded-lg border border-border bg-surface pl-10 pr-4 py-3 text-sm text-foreground placeholder:text-foreground/40 focus:outline-none focus-visible:ring-2 focus-visible:ring-ring focus:border-primary transition-colors duration-200"
             />
           </div>
           <button
@@ -126,7 +126,7 @@ export default function AuditSearchBar({
                 className={`cursor-pointer rounded-full border px-3.5 py-1.5 text-xs font-medium transition-all duration-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-ring ${
                   active
                     ? "border-primary bg-primary/10 text-primary"
-                    : "border-border bg-white text-foreground/60 hover:border-primary/30"
+                    : "border-border bg-surface text-foreground/60 hover:border-primary/30"
                 }`}
               >
                 {t.label}

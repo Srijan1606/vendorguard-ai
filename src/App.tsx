@@ -84,7 +84,7 @@ export default function App() {
         ) : (
           !isLoading &&
           !errorMessage && (
-            <div className="rounded-xl border border-dashed border-border bg-white/50 py-16 sm:py-24 text-center flex flex-col items-center gap-3">
+            <div className="rounded-xl border border-dashed border-border bg-surface/50 py-16 sm:py-24 text-center flex flex-col items-center gap-3">
               <div className="flex items-center justify-center w-12 h-12 rounded-full bg-primary/10 text-primary">
                 <ShieldQuestion className="w-6 h-6" aria-hidden="true" />
               </div>
