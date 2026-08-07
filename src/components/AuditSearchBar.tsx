@@ -18,11 +18,24 @@ const TOGGLES: ToggleDef[] = [
   { key: "scanBreach", label: "Scan Breach History" },
 ];
 
+interface PresetVendor {
+  label: string;
+  vendor: string;
+  /** When true, this preset simulates an unverifiable vendor / failed lookup for demo purposes. */
+  simulateFailure?: boolean;
+}
+
+const PRESET_VENDORS: PresetVendor[] = [
+  { label: "Audit Slack", vendor: "Slack" },
+  { label: "Audit Notion", vendor: "Notion" },
+  { label: "Audit Unknown SaaS", vendor: "Unknown SaaS Co", simulateFailure: true },
+];
+
 export default function AuditSearchBar({
   onRunAudit,
   isLoading,
 }: {
-  onRunAudit: (vendor: string, options: AuditOptions) => void;
+  onRunAudit: (vendor: string, options: AuditOptions, simulateFailure?: boolean) => void;
   isLoading: boolean;
 }) {
   const [vendor, setVendor] = useState("");
@@ -46,6 +59,12 @@ export default function AuditSearchBar({
 
   function toggle(key: keyof AuditOptions) {
     setOptions((o) => ({ ...o, [key]: !o[key] }));
+  }
+
+  function handlePreset(preset: PresetVendor) {
+    setVendor(preset.vendor);
+    setError(null);
+    onRunAudit(preset.vendor, options, preset.simulateFailure);
   }
 
   return (
@@ -114,6 +133,25 @@ export default function AuditSearchBar({
               </button>
             );
           })}
+        </div>
+
+        <div className="mt-4 pt-4 border-t border-border">
+          <p className="text-xs font-medium text-foreground/50 mb-2">
+            Demo / Preset Vendors — instant sample results, no live lookup
+          </p>
+          <div className="flex flex-wrap gap-2">
+            {PRESET_VENDORS.map((preset) => (
+              <button
+                key={preset.label}
+                type="button"
+                onClick={() => handlePreset(preset)}
+                disabled={isLoading}
+                className="cursor-pointer rounded-full border border-secondary/30 bg-secondary/5 px-3.5 py-1.5 text-xs font-medium text-secondary transition-all duration-200 hover:bg-secondary/10 active:scale-[0.97] disabled:opacity-60 disabled:cursor-not-allowed focus:outline-none focus-visible:ring-2 focus-visible:ring-ring"
+              >
+                {preset.label}
+              </button>
+            ))}
+          </div>
         </div>
       </form>
     </section>
