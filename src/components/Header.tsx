@@ -1,10 +1,10 @@
 import { useEffect, useId, useRef, useState } from "react";
-import { ChevronDown, Check, ShieldCheck, Bell, User } from "lucide-react";
+import { ChevronDown, Check, ShieldCheck, Bell, User, Sparkles } from "lucide-react";
 import ThemeToggle from "./ThemeToggle";
 
 const WORKSPACES = ["Acme Security Team", "Procurement Ops", "IT Vendor Risk", "Personal Sandbox"];
 
-export default function Header() {
+export default function Header({ onNewAudit }: { onNewAudit?: () => void }) {
   const [open, setOpen] = useState(false);
   const [selected, setSelected] = useState(WORKSPACES[0]);
   const [activeIndex, setActiveIndex] = useState(0);
@@ -119,6 +119,15 @@ export default function Header() {
               </ul>
             )}
           </div>
+
+          <button
+            type="button"
+            onClick={onNewAudit}
+            className="cursor-pointer hidden sm:inline-flex items-center gap-1.5 rounded-lg border border-accent/30 bg-accent/5 px-3 py-2 text-sm font-medium text-accent hover:bg-accent/10 transition-all duration-200 active:scale-[0.97] focus:outline-none focus-visible:ring-2 focus-visible:ring-ring shrink-0"
+          >
+            <Sparkles className="w-4 h-4" aria-hidden="true" />
+            New Audit
+          </button>
 
           <button
             type="button"

@@ -2,8 +2,10 @@ import type { RiskStatus } from "../lib/mockAudit";
 
 const STATUS_COLOR: Record<RiskStatus, string> = {
   Compliant: "var(--color-success)",
+  "Low Risk": "var(--color-secondary)",
   Caution: "var(--color-warning)",
   "High Risk": "var(--color-destructive)",
+  Critical: "oklch(0.6 0.25 20)",
 };
 
 export default function RiskGauge({ score, status }: { score: number; status: RiskStatus }) {

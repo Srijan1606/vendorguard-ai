@@ -1,5 +1,5 @@
 import type { ReactNode } from "react";
-import { Lock, Award, History, Check, AlertTriangle, X, Minus } from "lucide-react";
+import { Lock, Award, History, Check, AlertTriangle, X, Minus, ShieldCheck, FileText, Users } from "lucide-react";
 import type { AuditResult, FlagLevel, CertStatus } from "../lib/mockAudit";
 import Badge, { type BadgeTone } from "./Badge";
 
@@ -18,9 +18,10 @@ const FLAG_ICON: Record<FlagLevel, ReactNode> = {
 };
 
 const CERT_TONE: Record<CertStatus, BadgeTone> = {
-  Certified: "pass",
-  "In Progress": "warning",
-  "Not Certified": "fail",
+  Verified: "pass",
+  Unavailable: "fail",
+  Expired: "warning",
+  Unknown: "neutral",
 };
 
 function CardShell({ icon, title, children }: { icon: ReactNode; title: string; children: ReactNode }) {
@@ -37,13 +38,27 @@ function CardShell({ icon, title, children }: { icon: ReactNode; title: string; 
   );
 }
 
+/** Derive privacy flag list from the PrivacyGovernance object. */
+function privacyFlags(privacy: AuditResult["privacyGovernance"]): { label: string; level: FlagLevel }[] {
+  const flags: { label: string; level: FlagLevel }[] = [];
+  if (privacy.dpaAvailable) flags.push({ label: "DPA Available", level: "pass" });
+  else flags.push({ label: "DPA Not Available", level: "fail" });
+  if (privacy.subprocessorList) flags.push({ label: "Subprocessor List Published", level: "pass" });
+  else flags.push({ label: "No Subprocessor List", level: "warning" });
+  if (privacy.cookiePolicy === "pass") flags.push({ label: "Cookie Policy Compliant", level: "pass" });
+  else if (privacy.cookiePolicy === "warning") flags.push({ label: "Cookie Policy Incomplete", level: "warning" });
+  else flags.push({ label: "Cookie Policy Missing", level: "fail" });
+  return flags;
+}
+
 export default function BreakdownCards({ result }: { result: AuditResult }) {
   return (
     <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+      {/* Data Privacy & GDPR */}
       <CardShell icon={<Lock className="w-4 h-4" aria-hidden="true" />} title="Data Privacy & GDPR">
-        <p className="text-sm text-foreground/70 leading-relaxed mb-3">{result.privacy.summary}</p>
+        <p className="text-sm text-foreground/70 leading-relaxed mb-3">{result.privacyGovernance.aiSummary}</p>
         <div className="flex flex-wrap gap-1.5 mt-auto">
-          {result.privacy.flags.map((flag, i) => (
+          {privacyFlags(result.privacyGovernance).map((flag, i) => (
             <Badge key={i} tone={FLAG_TONE[flag.level]} icon={FLAG_ICON[flag.level]}>
               {flag.label}
             </Badge>
@@ -51,6 +66,7 @@ export default function BreakdownCards({ result }: { result: AuditResult }) {
         </div>
       </CardShell>
 
+      {/* Security Certifications */}
       <CardShell icon={<Award className="w-4 h-4" aria-hidden="true" />} title="Security Certifications">
         <ul className="flex flex-col gap-3">
           {result.certifications.map((cert) => (
@@ -65,6 +81,7 @@ export default function BreakdownCards({ result }: { result: AuditResult }) {
         </ul>
       </CardShell>
 
+      {/* Data Breach & Incident History */}
       <CardShell icon={<History className="w-4 h-4" aria-hidden="true" />} title="Data Breach & Incident History">
         <p className="text-sm text-foreground/70 leading-relaxed mb-3">{result.breachHistory.summary}</p>
         {result.breachHistory.events.length > 0 ? (

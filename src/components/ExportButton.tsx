@@ -23,8 +23,11 @@ function buildTextReport(result: AuditResult): string {
   lines.push(`Overall Risk Score: ${result.riskScore} / 100 — ${result.riskStatus}`);
   lines.push("");
   lines.push("--- Data Privacy & GDPR ---");
-  lines.push(result.privacy.summary);
-  result.privacy.flags.forEach((f) => lines.push(`  • [${f.level.toUpperCase()}] ${f.label}`));
+  const pg = result.privacyGovernance;
+  lines.push(pg.aiSummary);
+  lines.push(`  • Cookie Policy: ${pg.cookiePolicy.toUpperCase()}`);
+  lines.push(`  • DPA Available: ${pg.dpaAvailable ? "YES" : "NO"}`);
+  lines.push(`  • Subprocessor List Published: ${pg.subprocessorList ? "YES" : "NO"}`);
   lines.push("");
   lines.push("--- Security Certifications ---");
   result.certifications.forEach((c) => lines.push(`  • ${c.name}: ${c.status} — ${c.detail}`));
