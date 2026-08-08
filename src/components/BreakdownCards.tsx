@@ -1,5 +1,5 @@
 import type { ReactNode } from "react";
-import { Lock, Award, History, Check, AlertTriangle, X, Minus, ShieldCheck, FileText, Users } from "lucide-react";
+import { Lock, Award, History, Check, AlertTriangle, X, Minus } from "lucide-react";
 import type { AuditResult, FlagLevel, CertStatus } from "../lib/mockAudit";
 import Badge, { type BadgeTone } from "./Badge";
 
@@ -52,53 +52,75 @@ function privacyFlags(privacy: AuditResult["privacyGovernance"]): { label: strin
 }
 
 export default function BreakdownCards({ result }: { result: AuditResult }) {
+  const privacy = result?.privacyGovernance;
+  const certs = result?.certifications ?? [];
+  const breach = result?.breachHistory;
+
   return (
     <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
       {/* Data Privacy & GDPR */}
       <CardShell icon={<Lock className="w-4 h-4" aria-hidden="true" />} title="Data Privacy & GDPR">
-        <p className="text-sm text-foreground/70 leading-relaxed mb-3">{result.privacyGovernance.aiSummary}</p>
-        <div className="flex flex-wrap gap-1.5 mt-auto">
-          {privacyFlags(result.privacyGovernance).map((flag, i) => (
-            <Badge key={i} tone={FLAG_TONE[flag.level]} icon={FLAG_ICON[flag.level]}>
-              {flag.label}
-            </Badge>
-          ))}
-        </div>
+        {privacy ? (
+          <>
+            <p className="text-sm text-foreground/70 leading-relaxed mb-3">{privacy.aiSummary}</p>
+            <div className="flex flex-wrap gap-1.5 mt-auto">
+              {privacyFlags(privacy).map((flag, i) => (
+                <Badge key={i} tone={FLAG_TONE[flag.level]} icon={FLAG_ICON[flag.level]}>
+                  {flag.label}
+                </Badge>
+              ))}
+            </div>
+          </>
+        ) : (
+          <p className="text-sm text-foreground/50 italic">Privacy data unavailable for this vendor.</p>
+        )}
       </CardShell>
 
       {/* Security Certifications */}
       <CardShell icon={<Award className="w-4 h-4" aria-hidden="true" />} title="Security Certifications">
-        <ul className="flex flex-col gap-3">
-          {result.certifications.map((cert) => (
-            <li key={cert.name} className="border-b border-border last:border-0 pb-3 last:pb-0">
-              <div className="flex items-center justify-between gap-2 mb-1">
-                <span className="text-sm font-medium text-foreground">{cert.name}</span>
-                <Badge tone={CERT_TONE[cert.status]}>{cert.status}</Badge>
-              </div>
-              <p className="text-xs text-foreground/60 leading-relaxed">{cert.detail}</p>
-            </li>
-          ))}
-        </ul>
+        {certs.length > 0 ? (
+          <ul className="flex flex-col gap-3">
+            {certs.map((cert) => (
+              <li key={cert.name} className="border-b border-border last:border-0 pb-3 last:pb-0">
+                <div className="flex items-center justify-between gap-2 mb-1">
+                  <span className="text-sm font-medium text-foreground">{cert.name}</span>
+                  <Badge tone={CERT_TONE[cert.status]}>{cert.status}</Badge>
+                </div>
+                <p className="text-xs text-foreground/60 leading-relaxed">{cert.detail}</p>
+              </li>
+            ))}
+          </ul>
+        ) : (
+          <p className="text-sm text-foreground/50 italic">No certification data available for this vendor.</p>
+        )}
       </CardShell>
 
       {/* Data Breach & Incident History */}
       <CardShell icon={<History className="w-4 h-4" aria-hidden="true" />} title="Data Breach & Incident History">
-        <p className="text-sm text-foreground/70 leading-relaxed mb-3">{result.breachHistory.summary}</p>
-        {result.breachHistory.events.length > 0 ? (
-          <ul className="flex flex-col gap-3 mt-auto">
-            {result.breachHistory.events.map((event, i) => (
-              <li key={i} className="border-b border-border last:border-0 pb-3 last:pb-0">
-                <div className="flex items-center justify-between gap-2 mb-1">
-                  <span className="text-sm font-medium text-foreground">{event.title}</span>
-                  <Badge tone={FLAG_TONE[event.severity]} icon={FLAG_ICON[event.severity]}>
-                    {event.date}
-                  </Badge>
-                </div>
-                <p className="text-xs text-foreground/60 leading-relaxed">{event.description}</p>
-              </li>
-            ))}
-          </ul>
-        ) : null}
+        {breach ? (
+          <>
+            <p className="text-sm text-foreground/70 leading-relaxed mb-3">{breach.summary}</p>
+            {breach.events.length > 0 ? (
+              <ul className="flex flex-col gap-3 mt-auto">
+                {breach.events.map((event, i) => (
+                  <li key={i} className="border-b border-border last:border-0 pb-3 last:pb-0">
+                    <div className="flex items-center justify-between gap-2 mb-1">
+                      <span className="text-sm font-medium text-foreground">{event.title}</span>
+                      <Badge tone={FLAG_TONE[event.severity]} icon={FLAG_ICON[event.severity]}>
+                        {event.date}
+                      </Badge>
+                    </div>
+                    <p className="text-xs text-foreground/60 leading-relaxed">{event.description}</p>
+                  </li>
+                ))}
+              </ul>
+            ) : (
+              <p className="text-sm text-foreground/50 italic mt-auto">No breach events found.</p>
+            )}
+          </>
+        ) : (
+          <p className="text-sm text-foreground/50 italic">Breach history data unavailable.</p>
+        )}
       </CardShell>
     </div>
   );

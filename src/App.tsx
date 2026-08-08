@@ -14,6 +14,7 @@ import AuditLogTable from "./components/AuditLogTable";
 import AIChatAssistant from "./components/AIChatAssistant";
 import AIRecommendations from "./components/AIRecommendations";
 import SourceQualityPanel from "./components/SourceQualityPanel";
+import BreakdownCards from "./components/BreakdownCards";
 import { generateAuditResult, type AuditResult } from "./lib/mockAudit";
 import { ShieldCheck, Search, BarChart3, Sparkles, Zap, Brain } from "lucide-react";
 
@@ -147,6 +148,9 @@ export default function App() {
 
             {/* Executive Summary */}
             <ExecutiveSummaryCard result={result} />
+
+            {/* Breakdown: Privacy, Certifications, Breach History */}
+            <BreakdownCards result={result} />
 
             {/* AI Reasoning + Risk Breakdown */}
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
