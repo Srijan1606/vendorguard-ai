@@ -1,5 +1,4 @@
 import { Brain, ThumbsUp, ThumbsDown } from "lucide-react";
-import Badge from "./Badge";
 import type { AuditResult } from "../lib/mockAudit";
 
 export default function AIReasoningPanel({ result }: { result: AuditResult }) {

@@ -1,12 +1,5 @@
 import { ClipboardCheck } from "lucide-react";
 import type { ComplianceCheckItem } from "../lib/mockAudit";
-import Badge from "./Badge";
-
-const STATUS_CONFIG: Record<string, { tone: "pass" | "warn" | "fail"; label: string }> = {
-  pass: { tone: "pass", label: "✓" },
-  warn: { tone: "warning", label: "⚠" },
-  fail: { tone: "fail", label: "✗" },
-};
 
 export default function ComplianceChecklist({ items }: { items: ComplianceCheckItem[] }) {
   return (
@@ -20,7 +13,6 @@ export default function ComplianceChecklist({ items }: { items: ComplianceCheckI
 
       <ul className="flex flex-col gap-2">
         {items.map((item, i) => {
-          const cfg = STATUS_CONFIG[item.status];
           return (
             <li key={i} className="flex items-center justify-between gap-3 px-3 py-2.5 rounded-lg border border-border/50 hover:bg-muted/30 transition-colors duration-150">
               <div className="flex items-center gap-2.5">

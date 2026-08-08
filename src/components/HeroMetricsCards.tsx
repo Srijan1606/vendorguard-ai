@@ -80,7 +80,7 @@ export default function HeroMetricsCards({ result, auditCount }: Props) {
 
   return (
     <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4">
-      {metrics.map((m, i) => (
+      {metrics.map((m) => (
         <div
           key={m.label}
           className="rounded-xl border border-border bg-surface shadow-sm p-4 sm:p-5 transition-all duration-200 hover:shadow-md hover:-translate-y-0.5"

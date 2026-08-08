@@ -156,17 +156,6 @@ function slugifyDomain(input: string): string {
   return `${trimmed.replace(/\s+/g, "")}.com`;
 }
 
-function getStatus(name: string): [CertStatus, string] {
-  const statuses: [CertStatus, string][] = [
-    ["Verified", `Valid attestation report on file, last audited within 12 months.`],
-    ["Verified", `Current certification with no lapses in coverage.`],
-    ["Unavailable", `No attestation report found in vendor trust center or public registries.`],
-    ["Expired", `Previous certification lapsed — renewal not confirmed.`],
-    ["Unknown", `Certification status could not be verified from public sources.`],
-  ];
-  return pick(statuses, hashString(name), 0);
-}
-
 export function generateAuditResult(
   vendorInput: string,
   options: { includePrivacy: boolean; checkSoc2: boolean; scanBreach: boolean }

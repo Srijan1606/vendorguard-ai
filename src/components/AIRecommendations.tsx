@@ -1,4 +1,4 @@
-import { Lightbulb, AlertCircle, CheckCircle2, ArrowRight } from "lucide-react";
+import { Lightbulb, ArrowRight } from "lucide-react";
 import type { Recommendation } from "../lib/mockAudit";
 
 const PRIORITY_CONFIG: Record<string, { color: string; label: string }> = {
