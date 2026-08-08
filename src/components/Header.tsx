@@ -1,5 +1,5 @@
 import { useEffect, useId, useRef, useState } from "react";
-import { ChevronDown, Check, ShieldCheck, Bell, User, Sparkles } from "lucide-react";
+import { ChevronDown, Check, ShieldCheck, Bell, User, Sparkles, LogOut, Settings, HelpCircle } from "lucide-react";
 import ThemeToggle from "./ThemeToggle";
 
 const WORKSPACES = ["Acme Security Team", "Procurement Ops", "IT Vendor Risk", "Personal Sandbox"];
