@@ -137,9 +137,9 @@ export default function App() {
 
         {/* Results Dashboard */}
         {result && !isLoading && (
-          <div className="flex flex-col gap-4 animate-in fade-in duration-300">
+          <div className="flex flex-col gap-4">
             {/* Top row: title + actions */}
-            <div className="flex items-center justify-between gap-3">
+            <div className="animate-staggered stagger-1 flex items-center justify-between gap-3">
               <h2 className="font-heading text-base sm:text-lg font-semibold text-foreground">
                 Audit Results
               </h2>
@@ -147,35 +147,43 @@ export default function App() {
             </div>
 
             {/* Executive Summary */}
-            <ExecutiveSummaryCard result={result} />
+            <div className="animate-staggered stagger-2">
+              <ExecutiveSummaryCard result={result} />
+            </div>
 
             {/* Breakdown: Privacy, Certifications, Breach History */}
-            <BreakdownCards result={result} />
+            <div className="animate-staggered stagger-3">
+              <BreakdownCards result={result} />
+            </div>
 
             {/* AI Reasoning + Risk Breakdown */}
-            <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
+            <div className="animate-staggered stagger-4 grid grid-cols-1 lg:grid-cols-2 gap-4">
               <AIReasoningPanel result={result} />
               <RiskBreakdownBars result={result} />
             </div>
 
             {/* Compliance Checklist + Vendor Profile */}
-            <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
+            <div className="animate-staggered stagger-5 grid grid-cols-1 lg:grid-cols-2 gap-4">
               <ComplianceChecklist items={result.complianceChecklist} />
               <VendorProfileCard profile={result.vendorProfile} />
             </div>
 
             {/* Evidence Explorer + Source Citations */}
-            <EvidenceExplorer sources={result.evidenceSources} />
-            <AuditLogTable result={result} />
+            <div className="animate-staggered stagger-6">
+              <EvidenceExplorer sources={result.evidenceSources} />
+            </div>
+            <div className="animate-staggered stagger-7">
+              <AuditLogTable result={result} />
+            </div>
 
             {/* AI Recommendations + Source Quality */}
-            <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
+            <div className="animate-staggered stagger-8 grid grid-cols-1 lg:grid-cols-2 gap-4">
               <AIRecommendations items={result.recommendations} />
               <SourceQualityPanel sources={result.sourceQuality} />
             </div>
 
             {/* Re-run button */}
-            <div className="flex justify-center pt-2">
+            <div className="animate-staggered stagger-9 flex justify-center pt-2">
               <button
                 type="button"
                 onClick={() => {

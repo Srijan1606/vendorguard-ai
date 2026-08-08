@@ -14,7 +14,7 @@ const CATEGORY_COLORS: Record<string, string> = {
 
 export default function RiskBreakdownBars({ result }: { result: AuditResult }) {
   return (
-    <section className="rounded-xl border border-border bg-surface shadow-sm p-5 sm:p-6">
+    <section className="glow-hover rounded-xl border border-border bg-surface shadow-sm p-5 sm:p-6">
       <div className="flex items-center gap-2 mb-4">
         <div className="flex items-center justify-center w-8 h-8 rounded-lg bg-accent/10 text-accent shrink-0">
           <BarChart3 className="w-4 h-4" aria-hidden="true" />

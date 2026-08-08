@@ -81,7 +81,7 @@ export default function AIChatAssistant() {
 
       {/* Panel */}
       <div
-        className={`fixed bottom-6 right-6 z-40 w-[360px] max-w-[calc(100vw-2rem)] rounded-xl border border-border bg-surface shadow-xl transition-all duration-300 ease-out flex flex-col ${
+        className={`fixed bottom-6 right-6 z-40 w-[360px] max-w-[calc(100vw-2rem)] rounded-xl border border-border/60 shadow-xl transition-all duration-300 ease-out flex flex-col glass-premium ${
           isOpen ? "scale-100 opacity-100" : "scale-95 opacity-0 pointer-events-none"
         }`}
         style={{ maxHeight: "min(600px, calc(100vh - 3rem))" }}

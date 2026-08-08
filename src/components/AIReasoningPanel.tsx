@@ -3,7 +3,7 @@ import type { AuditResult } from "../lib/mockAudit";
 
 export default function AIReasoningPanel({ result }: { result: AuditResult }) {
   return (
-    <section className="rounded-xl border border-border bg-surface shadow-sm p-5 sm:p-6">
+    <section className="glow-hover-violet rounded-xl border border-border bg-surface shadow-sm p-5 sm:p-6">
       <div className="flex items-center gap-2 mb-4">
         <div className="flex items-center justify-center w-8 h-8 rounded-lg bg-secondary/10 text-secondary shrink-0">
           <Brain className="w-4 h-4" aria-hidden="true" />
@@ -23,7 +23,11 @@ export default function AIReasoningPanel({ result }: { result: AuditResult }) {
           </h4>
           <ul className="flex flex-col gap-2">
             {result.positiveFactors.map((f, i) => (
-              <li key={i} className="flex items-center gap-2 px-3 py-2 rounded-lg bg-success/5 border border-success/10">
+              <li
+                key={i}
+                className="animate-staggered stagger-1 flex items-center gap-2 px-3 py-2 rounded-lg bg-success/5 border border-success/10"
+                style={{ animationDelay: `${i * 0.08}s` }}
+              >
                 <span className="w-5 h-5 rounded-full bg-success/10 text-success flex items-center justify-center shrink-0">
                   <span className="text-xs font-bold">+</span>
                 </span>
@@ -41,7 +45,11 @@ export default function AIReasoningPanel({ result }: { result: AuditResult }) {
           </h4>
           <ul className="flex flex-col gap-2">
             {result.negativeFactors.map((f, i) => (
-              <li key={i} className="flex items-center gap-2 px-3 py-2 rounded-lg bg-destructive/5 border border-destructive/10">
+              <li
+                key={i}
+                className="animate-staggered stagger-1 flex items-center gap-2 px-3 py-2 rounded-lg bg-destructive/5 border border-destructive/10"
+                style={{ animationDelay: `${i * 0.1}s` }}
+              >
                 <span className="w-5 h-5 rounded-full bg-destructive/10 text-destructive flex items-center justify-center shrink-0">
                   <span className="text-xs font-bold">−</span>
                 </span>

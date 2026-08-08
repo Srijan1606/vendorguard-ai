@@ -83,7 +83,7 @@ export default function HeroMetricsCards({ result, auditCount }: Props) {
       {metrics.map((m) => (
         <div
           key={m.label}
-          className="rounded-xl border border-border bg-surface shadow-sm p-4 sm:p-5 transition-all duration-200 hover:shadow-md hover:-translate-y-0.5"
+          className="glow-hover rounded-xl border border-border bg-surface shadow-sm p-4 sm:p-5"
         >
           <div className="flex items-center justify-between mb-3">
             <div className={`flex items-center justify-center w-9 h-9 rounded-lg ${m.color}`}>

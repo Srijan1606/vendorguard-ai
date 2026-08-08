@@ -26,7 +26,7 @@ const CERT_TONE: Record<CertStatus, BadgeTone> = {
 
 function CardShell({ icon, title, children }: { icon: ReactNode; title: string; children: ReactNode }) {
   return (
-    <div className="rounded-xl border border-border bg-surface shadow-sm p-5 flex flex-col h-full transition-shadow duration-200 hover:shadow-md">
+    <div className="glow-hover rounded-xl border border-border bg-surface shadow-sm p-5 flex flex-col h-full">
       <div className="flex items-center gap-2 mb-3">
         <div className="flex items-center justify-center w-8 h-8 rounded-lg bg-primary/10 text-primary shrink-0">
           {icon}

@@ -9,7 +9,7 @@ const PRIORITY_CONFIG: Record<string, { color: string; label: string }> = {
 
 export default function AIRecommendations({ items }: { items: Recommendation[] }) {
   return (
-    <section className="rounded-xl border border-border bg-surface shadow-sm p-5 sm:p-6">
+    <section className="glow-hover rounded-xl border border-border bg-surface shadow-sm p-5 sm:p-6">
       <div className="flex items-center gap-2 mb-4">
         <div className="flex items-center justify-center w-8 h-8 rounded-lg bg-accent/10 text-accent shrink-0">
           <Lightbulb className="w-4 h-4" aria-hidden="true" />

@@ -12,7 +12,7 @@ export default function VendorProfileCard({ profile }: { profile: VendorProfile 
   ];
 
   return (
-    <section className="rounded-xl border border-border bg-surface shadow-sm p-5 sm:p-6">
+    <section className="glow-hover rounded-xl border border-border bg-surface shadow-sm p-5 sm:p-6">
       <div className="flex items-center gap-2 mb-4">
         <div className="flex items-center justify-center w-8 h-8 rounded-lg bg-primary/10 text-primary shrink-0">
           <Building2 className="w-4 h-4" aria-hidden="true" />

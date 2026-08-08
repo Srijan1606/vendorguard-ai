@@ -1,117 +1,124 @@
-import { useEffect, useState } from "react";
-import { Loader2, Check } from "lucide-react";
+import { useEffect, useRef, useState } from "react";
 
 const STAGES = [
-  "Identifying Vendor",
-  "Discovering Official Website",
-  "Parsing Privacy Policy",
-  "Checking SOC2 Certification",
-  "Verifying ISO27001",
-  "Searching Public Breach Databases",
-  "Performing AI Compliance Analysis",
-  "Calculating Risk Score",
-  "Generating Executive Report",
+  "Establishing secure connection to vendor domains...",
+  "Scraping /privacy and /security endpoints...",
+  "Synthesizing SOC2 compliance metrics via LLM...",
+  "Verifying ISO27001 certification records...",
+  "Cross-referencing public breach databases...",
+  "Performing deep AI compliance analysis...",
+  "Calculating weighted risk and trust scores...",
+  "Generating executive summary report...",
+  "Finalizing Trust Score...",
 ];
 
+const TYPING_SPEED = 28; // ms per character
+const LINE_PAUSE = 400; // ms pause between fully typed lines
+
 export default function AuditLoadingScreen() {
-  const [currentStage, setCurrentStage] = useState(0);
+  const [currentLine, setCurrentLine] = useState(0);
+  const [typedChars, setTypedChars] = useState(0);
   const [completed, setCompleted] = useState<number[]>([]);
-  const [startTime] = useState(Date.now());
+  const [finished, setFinished] = useState(false);
   const [elapsed, setElapsed] = useState(0);
+  const startTimeRef = useRef(Date.now());
 
+  // ── Typing engine ──
   useEffect(() => {
-    const stageDuration = 700 + Math.random() * 600;
-    const timer = setInterval(() => {
-      setElapsed(Math.floor((Date.now() - startTime) / 1000));
-    }, 1000);
+    if (finished) return;
 
-    const advance = setTimeout(() => {
-      if (currentStage < STAGES.length - 1) {
-        setCompleted((prev) => [...prev, currentStage]);
-        setCurrentStage((prev) => prev + 1);
+    const line = STAGES[currentLine];
+
+    if (typedChars < line.length) {
+      const t = setTimeout(() => setTypedChars((c) => c + 1), TYPING_SPEED);
+      return () => clearTimeout(t);
+    }
+
+    // Line fully typed → mark completed, advance or finish
+    const pause = setTimeout(() => {
+      setCompleted((p) => [...p, currentLine]);
+      if (currentLine < STAGES.length - 1) {
+        setCurrentLine((l) => l + 1);
+        setTypedChars(0);
       } else {
-        setCompleted((prev) => [...prev, currentStage]);
+        setFinished(true);
       }
-    }, stageDuration);
+    }, LINE_PAUSE);
+    return () => clearTimeout(pause);
+  }, [currentLine, typedChars, finished]);
 
-    return () => {
-      clearTimeout(advance);
-      clearInterval(timer);
-    };
-  }, [currentStage, startTime]);
+  // ── Elapsed timer ──
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setElapsed(Math.floor((Date.now() - startTimeRef.current) / 1000));
+    }, 250);
+    return () => clearInterval(interval);
+  }, []);
 
-  const progress = ((completed.length + (currentStage < STAGES.length ? 1 : 0)) / STAGES.length) * 100;
-  const remaining = Math.max(1, Math.ceil(((STAGES.length - completed.length - (currentStage < STAGES.length ? 1 : 0)) * 800) / 1000));
+  const progress = Math.round(((completed.length + (finished ? 1 : 0)) / STAGES.length) * 100);
+  const remaining = Math.max(1, Math.ceil(((STAGES.length - completed.length - (finished ? 0 : 1)) * 900) / 1000));
 
   return (
-    <section className="rounded-xl border border-border bg-surface shadow-sm p-6 sm:p-8">
-      <div className="flex items-center gap-3 mb-6">
-        <Loader2 className="w-5 h-5 text-primary animate-spin" aria-hidden="true" />
-        <div>
-          <h2 className="font-heading text-base font-semibold text-foreground">AI Compliance Audit in Progress</h2>
-          <p className="text-xs text-foreground/50">
-            {elapsed}s elapsed · ~{remaining}s remaining
-          </p>
-        </div>
+    <section className="rounded-xl border border-border/60 bg-surface shadow-sm overflow-hidden" role="status" aria-label="Audit in progress">
+      {/* ── Terminal window chrome ── */}
+      <div className="flex items-center gap-2 px-4 py-3 border-b border-border/40 bg-muted/60">
+        <span className="w-3 h-3 rounded-full bg-destructive/70" />
+        <span className="w-3 h-3 rounded-full bg-warning/70" />
+        <span className="w-3 h-3 rounded-full bg-success/70" />
+        <span className="ml-3 text-xs font-mono text-foreground/40 tracking-widest uppercase">compliance-engine</span>
+        <span className="ml-auto text-xs font-mono text-foreground/30">{elapsed}s · ~{remaining}s</span>
       </div>
 
-      {/* Progress bar */}
-      <div className="h-2 rounded-full bg-muted mb-6 overflow-hidden" role="progressbar" aria-valuenow={Math.round(progress)} aria-valuemin={0} aria-valuemax={100}>
+      {/* ── Log body ── */}
+      <div className="p-5 sm:p-6 font-mono text-sm leading-relaxed space-y-1.5 min-h-[280px] terminal-log">
+        {STAGES.map((stage, i) => {
+          const isComplete = completed.includes(i);
+          const isActive = i === currentLine && !isComplete;
+
+          if (isActive) {
+            const typed = stage.slice(0, typedChars);
+            return (
+              <div key={i} className="flex items-start gap-2">
+                <span className="text-emerald-400 shrink-0 mt-0.5 select-none">❯</span>
+                <span className="text-emerald-200/90 cursor-blink">{typed}</span>
+              </div>
+            );
+          }
+
+          if (isComplete) {
+            return (
+              <div key={i} className="flex items-start gap-2 opacity-70">
+                <span className="text-emerald-500 shrink-0 mt-0.5 select-none">✔</span>
+                <span className="text-emerald-300/70">{stage}</span>
+              </div>
+            );
+          }
+
+          // Pending — dimmed
+          return (
+            <div key={i} className="flex items-start gap-2 opacity-30">
+              <span className="text-foreground/40 shrink-0 mt-0.5 select-none">{">"}</span>
+              <span className="text-foreground/40">{stage}</span>
+            </div>
+          );
+        })}
+
+        {/* ── Final pulse indicator ── */}
+        {finished && (
+          <div className="flex items-center gap-2 pt-2 text-emerald-400">
+            <span className="w-2 h-2 rounded-full bg-emerald-400 pulse-dot" style={{ "--pulse-color": "oklch(0.65 0.2 150 / 0.6)" } as React.CSSProperties} />
+            <span className="text-xs font-semibold tracking-wider uppercase">Ready</span>
+          </div>
+        )}
+      </div>
+
+      {/* ── Progress bar footer ── */}
+      <div className="h-1 bg-muted" role="progressbar" aria-valuenow={progress} aria-valuemin={0} aria-valuemax={100}>
         <div
-          className="h-full rounded-full bg-gradient-to-r from-primary to-secondary transition-all duration-500 ease-out"
+          className="h-full bg-gradient-to-r from-emerald-500 via-primary to-secondary transition-all duration-300 ease-out"
           style={{ width: `${progress}%` }}
         />
       </div>
-
-      {/* Stages list */}
-      <ul className="flex flex-col gap-2">
-        {STAGES.map((stage, i) => {
-          const isComplete = completed.includes(i);
-          const isActive = i === currentStage && !isComplete;
-          return (
-            <li
-              key={stage}
-              className={`flex items-center gap-3 px-3 py-2 rounded-lg transition-all duration-300 ${
-                isActive ? "bg-primary/5 border border-primary/20" : ""
-              } ${isComplete ? "opacity-70" : ""}`}
-            >
-              <span
-                className={`flex items-center justify-center w-6 h-6 rounded-full shrink-0 transition-all duration-300 ${
-                  isComplete
-                    ? "bg-success/10 text-success"
-                    : isActive
-                    ? "bg-primary/10 text-primary"
-                    : "bg-muted text-foreground/30"
-                }`}
-              >
-                {isComplete ? (
-                  <Check className="w-3.5 h-3.5" aria-hidden="true" />
-                ) : (
-                  <span className="w-1.5 h-1.5 rounded-full bg-current" />
-                )}
-              </span>
-              <span
-                className={`text-sm transition-colors duration-300 ${
-                  isComplete
-                    ? "text-foreground/60 line-through"
-                    : isActive
-                    ? "text-foreground font-medium"
-                    : "text-foreground/40"
-                }`}
-              >
-                {stage}
-              </span>
-              {isActive && (
-                <span className="ml-auto flex gap-0.5">
-                  <span className="w-1 h-1 rounded-full bg-primary animate-bounce" style={{ animationDelay: "0ms" }} />
-                  <span className="w-1 h-1 rounded-full bg-primary animate-bounce" style={{ animationDelay: "150ms" }} />
-                  <span className="w-1 h-1 rounded-full bg-primary animate-bounce" style={{ animationDelay: "300ms" }} />
-                </span>
-              )}
-            </li>
-          );
-        })}
-      </ul>
     </section>
   );
 }
